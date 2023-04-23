@@ -14,7 +14,7 @@ app.add_middleware(
 
 @app.get("/")
 def pri() :
-    return {"Random" : "This is random text"}
+    return {"Random" : "This is updated random text"}
 
 
 app.include_router(post.route)
