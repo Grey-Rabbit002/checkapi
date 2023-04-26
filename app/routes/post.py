@@ -2,11 +2,12 @@ from sqlalchemy.orm import Session
 from  app.databases import get_db
 from fastapi import HTTPException,status,Depends,APIRouter,Response
 from .. import models,schemas
+from typing import Optional
 route = APIRouter()
 
 @route.get("/posts/show")
-async def posts(db:Session = Depends(get_db)):
-    results = db.query(models.TeacherModel).all()
+async def posts(db:Session = Depends(get_db),search_dept_id : Optional[str]= -1,search_section:Optional[str]= ""):
+    results = db.query(models.TeacherModel).filter(models.TeacherModel.dept_id == search_dept_id,models.TeacherModel.section == search_section).all()
     if not results :
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="No Post Found")
     
