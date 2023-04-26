@@ -44,5 +44,4 @@ async def getSpecific(id:str,db:Session =Depends(get_db)) :
     post = db.query(models.TeacherModel).filter(models.TeacherModel.id == id).first()
     if not post :
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="No Such Activity Found")
-
     return post
