@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr
 
 class Post(BaseModel) :
     dept_id : int
@@ -16,3 +16,18 @@ class ResponsePost(Post) :
 
 class UpdatePost(Post) :
     pass
+
+
+class createUser(BaseModel) :
+    dept_id : str
+    username : str
+    email : EmailStr
+    password : str
+
+class responseUser(BaseModel) :
+    dept_id : str
+    username : str
+    email : EmailStr
+    class Config :
+        orm_mode = True
+

@@ -9,3 +9,11 @@ class TeacherModel(Base) :
     title = Column(String,nullable=False)
     content = Column(String,nullable=False)
     created_at =  Column(TIMESTAMP(timezone=True),nullable=False,server_default=str('now()'))
+
+class UserModel(Base) :
+    __tablename__ = "user"
+    id = Column(Integer,primary_key=True,nullable=False)
+    email = Column(String,nullable=False,unique=True)
+    password = Column(String,nullable=False)
+    dept_id = Column(String,nullable=False)
+    username = Column(String,nullable=False)
