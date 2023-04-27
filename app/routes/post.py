@@ -3,15 +3,25 @@ from  app.databases import get_db
 from fastapi import HTTPException,status,Depends,APIRouter,Response
 from .. import models,schemas
 from typing import Optional
+import datetime
 route = APIRouter()
 
 @route.get("/posts/show")
 async def posts(db:Session = Depends(get_db),search_dept_id : Optional[str]= -1,search_section:Optional[str]= ""):
-    results = db.query(models.TeacherModel).filter(models.TeacherModel.dept_id == search_dept_id,models.TeacherModel.section == search_section).all()
+    results = db.query(models.TeacherModel).filter(models.TeacherModel.dept_id == search_dept_id,models.TeacherModel.section == search_section).limit(limit=5).all()
     if not results :
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="No Post Found")
-    
-    return results
+    res = []
+    curr_dateTime = datetime.datetime.now()
+    for i in results :
+        dt_object = datetime.datetime.fromisoformat(str(i.created_at).split('+')[0])
+        print(dt_object)
+        time_diff = curr_dateTime - dt_object
+        minutes_diff = time_diff.total_seconds() // 60
+        if minutes_diff <= 30 :
+            res.append(i)
+
+    return res
 
 @route.post("/posts/create",status_code=status.HTTP_201_CREATED,response_model=schemas.ResponsePost)
 async def createpost(new_post :schemas.CreatePost,db: Session = Depends(get_db)) :
